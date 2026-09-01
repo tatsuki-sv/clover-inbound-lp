@@ -33,9 +33,9 @@
     // ↓ T-021: Googleフォームを送信先にする場合はこの3つを使う（詳しくは site/GOOGLE_FORM_SETUP.md）。
     //   優先順位: GOOGLE_FORM_ACTION が設定されていればそれを最優先で使い、
     //   無ければ FORM_ENDPOINT、それも無ければ GOOGLE_FORM_URL（新規タブで開くだけの簡易フォールバック）の順。
-    GOOGLE_FORM_ACTION: '', // ← 例: 'https://docs.google.com/forms/d/e/XXXX/formResponse'
-    GOOGLE_FORM_ENTRIES: {}, // ← 例: {name:'entry.111', contact:'entry.222', flight_no:'entry.333', travel_date:'entry.444', pax:'entry.555', arrival_plan:'entry.556', message:'entry.777', plan_arrange:'entry.778', course_interest:'entry.666', lang:'entry.888', utm:'entry.999', lp_variant:'entry.1010'}
-    GOOGLE_FORM_URL: '', // ← 例: 'https://docs.google.com/forms/d/e/XXXX/viewform'（ACTION未設定時のフォールバック。設定するとボタンが新規タブでこのURLを開く。generate_leadは遷移前に発火）
+    GOOGLE_FORM_ACTION: 'https://docs.google.com/forms/d/e/1FAIpQLSdfsg1t5h76k8jqSjF2xXJi5LN5dT3wYYT1QAkG2shafnhkLQ/formResponse', // ← 例: 'https://docs.google.com/forms/d/e/XXXX/formResponse'
+    GOOGLE_FORM_ENTRIES: {name:'entry.1615223431', flight_no:'entry.271648375', contact:'entry.1714242736', travel_date:'entry.171112459', pax:'entry.1278405461', arrival_plan:'entry.919290611', message:'entry.936865536', plan_arrange:'entry.2023605452', course_interest:'entry.1342674337', lang:'entry.1138499311', utm:'entry.1786210250', lp_variant:'entry.247818356'},
+    GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSdfsg1t5h76k8jqSjF2xXJi5LN5dT3wYYT1QAkG2shafnhkLQ/viewform', // ← 例: 'https://docs.google.com/forms/d/e/XXXX/viewform'（ACTION未設定時のフォールバック。設定するとボタンが新規タブでこのURLを開く。generate_leadは遷移前に発火）
     // ↓ T-008: LINE・WhatsAppの受け口。開設前は両方とも空文字 '' のままにする。
     //   空文字＝フォームのみ表示（現行の主導線）。どちらかにURLを入れると、
     //   固定バー（画面下部）とヒーロー直下に「LINE／WhatsApp／線上估價」3ボタンが自動で出る。
