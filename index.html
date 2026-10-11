@@ -8,11 +8,14 @@
 <meta property="og:title" data-i18n-attr="content:meta.og_title" content="姬路・神戶包車旅遊｜CLoVER">
 <meta property="og:description" data-i18n-attr="content:meta.description" content="姬路出發的都市型包車服務。日本政府核可的正規營運業者，計時制、不跳錶，行程可依需求規劃。ALPHARD／HIACE 最新車款，日式待客品質。歡迎線上索取報價。">
 <meta property="og:type" content="website">
-<!-- og:image: IMG-01差し替え後にここへ絶対URLを入れる（現状は仮画像のため未設定） -->
-<!-- <meta property="og:image" content="https://cloverhimeji.com/assets/img-01-alphard-front.jpg"> -->
+<!-- T-061: OGP。og:image は本番ドメインの絶対URL（assets/demo-01.jpg）。画像を差し替えるときは同名で置き換えるか、ここのURLを直す。 -->
+<meta property="og:image" content="https://cloverkobe.com/assets/demo-01.jpg">
+<meta property="og:url" content="https://cloverkobe.com/">
+<meta property="og:site_name" content="CLoVER">
+<meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
-<!-- T-020 §17-1: ?v= 付きURLはvなしURLをcanonicalとする。hrefはJSで現在地から生成（本ファイルは複数ドメインで配信されうるため静的な絶対URLを書かない）。 -->
-<link rel="canonical" id="canonicalLink" href="">
+<!-- T-061: canonical は静的に本番ルートへ固定（広告の ?utm_* 付きURLも同一ページとして扱わせる）。JS（下方）は v・utm_*・fbclid・gclid を除いた現在地で上書きする。 -->
+<link rel="canonical" id="canonicalLink" href="https://cloverkobe.com/">
 
 <!--
   ============================================================
@@ -87,28 +90,130 @@
   fbq('track', 'PageView');
 </script>
 
-<!-- ===== 構造化データ (LocalBusiness) ===== -->
+<!-- ===== 構造化データ（T-061）: @graph = 事業者(LocalBusiness) + FAQPage =====
+     ・FAQPage はページ上の繁体字FAQ（#faq）の文と一致させている。FAQ本文を直したら、ここの同じ文も直すこと。
+     ・非表示の「神戸空港の合流」と会期限定の「草間彌生《南瓜》」は含めていない。
+     ・電話番号・料金は未確定のため書かない。 -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "CLoVER",
-  "description": "姬路出發的都市型包車（Hire）服務。計時制、不跳錶，行程可依需求規劃。",
-  "url": "https://cloverhimeji.com/",
-  "telephone": "",
-  "priceRange": "見積制",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "姫路市",
-    "addressRegion": "兵庫県",
-    "addressCountry": "JP"
-  },
-  "areaServed": ["姫路", "神戸", "大阪", "京都", "奈良", "関西国際空港"],
-  "parentOrganization": {
-    "@type": "Organization",
-    "name": "GPM Co., Ltd.",
-    "address": "兵庫県姫路市"
-  }
+  "@graph": [
+    {
+      "@type": [
+        "LocalBusiness",
+        "TaxiService"
+      ],
+      "@id": "https://cloverkobe.com/#business",
+      "name": "CLoVER",
+      "description": "姬路出發的都市型包車（Hire）服務。計時制、不跳錶，行程可依需求規劃。",
+      "url": "https://cloverkobe.com/",
+      "image": "https://cloverkobe.com/assets/demo-01.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "姫路市",
+        "addressRegion": "兵庫県",
+        "addressCountry": "JP"
+      },
+      "areaServed": [
+        "神戸",
+        "姫路",
+        "有馬温泉",
+        "六甲山",
+        "神戸空港",
+        "関西国際空港"
+      ],
+      "availableLanguage": [
+        "zh-Hant",
+        "en",
+        "ja"
+      ],
+      "identifier": [
+        {
+          "@type": "PropertyValue",
+          "name": "ハイヤー許可番号",
+          "value": "近運自二第1096号"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "旅行業登録番号（兵庫県知事登録）",
+          "value": "第2-904号"
+        }
+      ],
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "ジーピーエム株式会社",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "姫路市",
+          "addressRegion": "兵庫県",
+          "addressCountry": "JP"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://cloverkobe.com/#faq",
+      "inLanguage": "zh-Hant",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "班機延誤的話怎麼辦？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "我們會依班機編號追蹤實際抵達時間，並自動調整接機時刻，不需要您另外通知。抵達後若行李或手續花了較久，也請放心，司機會等候。等待時間的計算方式，會在報價郵件中一併說明。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "我是從關西機場（KIX）或大阪、京都出發，也能用嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可以。關西機場、大阪、京都、奈良的上下車同樣可以安排。這些路線採計時制（不跳錶），與神戶機場接送的固定價格不同。所需時間較長，請在索取報價時告知出發地、目的地與班機時間。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "可以取消嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可以。取消手續費依取消時間點而定，具體規定會在報價與預約確認郵件中明確載明，確認後才成立預約。因颱風・大雪等天候因素導致無法安全行駛時，我們會與您協商改期或全額退款。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "怎麼付款？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可於當天以日圓現金支付，或依事前安排以信用卡・銀行匯款支付。可支付方式與付款時間會在報價郵件中說明。日本沒有給小費的習慣，車資之外不需另外支付。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "除了包車，可以連整趟行程的預約也一起交給你們嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "可以。CLoVER 的營運公司 GPM 股份有限公司同時登錄為旅行業者（兵庫縣知事登錄 第2-904號），因此除了用車，溫泉外湯的入浴券、餐廳訂位、住宿與各項設施的門票，都能由我們代為安排。這些費用不包含在包車報價中，我們會另外報價並在報價單上分項列出，確認後才成立。請在索取報價時一併告知。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "深夜或清晨的班機也能接送嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "長榮航空的台北⇄神戶班機目前沒有深夜或清晨時段（最早抵達為 10:00、最晚抵達為 18:00），都在一般營運時間內。若您搭的是其他航空公司或其他時段的班機，請在索取報價時填寫班機時間，我們會回覆是否能安排。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "帶長輩、小孩或大件行李，也方便嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "這正是包車最有感的地方。全程不用換車、不用把行李搬上搬下，也不用找寄物櫃——行李一路放在車上。ALPHARD 可放大型行李箱 3–4 件（4 人乘坐時），HIACE 可放 6–9 件。兒童座椅免費提供，請在預約時告知孩子的年齡與體重，我們會事先裝好。嬰兒車、輪椅等也請一併告知。"
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
 
@@ -2146,7 +2251,11 @@
     var canonicalLink = document.getElementById('canonicalLink');
     if (canonicalLink) {
       var canonicalParams = new URLSearchParams(window.location.search);
+      // T-061: v・utm_*・fbclid・gclid を除去（広告URLの違いで別ページ扱いにしない）
       canonicalParams.delete('v');
+      canonicalParams.delete('fbclid');
+      canonicalParams.delete('gclid');
+      Array.from(canonicalParams.keys()).forEach(function (k) { if (k.indexOf('utm_') === 0) canonicalParams.delete(k); });
       var qs = canonicalParams.toString();
       canonicalLink.setAttribute('href', window.location.origin + window.location.pathname + (qs ? '?' + qs : ''));
     }
