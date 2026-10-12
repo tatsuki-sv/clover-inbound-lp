@@ -2406,6 +2406,36 @@
     });
   }
 
+  /* ---------- 4b. 各節への到達計測 section_view（T-062） ----------
+     【編集メモ（非エンジニア向け）】
+     下の SECTION_IDS に並べたセクション（id）が画面に50%以上入ったとき、
+     GA4 に section_view（section=id名, lp_variant）を1ページ表示につき1回だけ送る。
+     「どの節で離脱したか」を見るための計測。節を増減したいときはこの配列だけ編集する。
+     フォーム節（lead-form）に着いたときは Meta にも ViewForm を1回送る。
+     縦に長い節は「50%以上」に届かないことがあるため、画面高の半分以上を覆えば到達とみなす。 */
+  (function () {
+    if (!('IntersectionObserver' in window)) return; // 古いブラウザでは何もしない
+    var SECTION_IDS = ['map', 'day', 'why', 'fleet', 'pricing', 'lead-form', 'faq'];
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var tall = entry.intersectionRect.height >= window.innerHeight * 0.5;
+        if (!(entry.isIntersecting && (entry.intersectionRatio >= 0.5 || tall))) return;
+        var id = entry.target.id;
+        io.unobserve(entry.target); // 1回送ったら監視を外す（重複送信防止）
+        if (typeof gtag === 'function') {
+          gtag('event', 'section_view', { section: id, lp_variant: LP_VARIANT });
+        }
+        if (id === 'lead-form' && typeof fbq === 'function') {
+          fbq('trackCustom', 'ViewForm');
+        }
+      });
+    }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1] }); // 細かく刻むのは縦長の節の判定漏れ防止
+    SECTION_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+  })();
+
   /* ---------- 5. フォーム送信 → generate_lead / fbq Lead（T-005 §2.3, §3.4） ----------
      方式: fetch同期発火（サンクスページ遷移は使わず、同一ページ内でサンクスメッセージを表示）。
      送信先は window.CLOVER_CONFIG.FORM_ENDPOINT（冒頭CONFIG参照、Formspree等未確定）。 */
