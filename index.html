@@ -71,6 +71,18 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  // T-067: lp_variant は config より前に set する（最初の page_view にも付けるため）。
+  // 判定ロジックは下の「1b」と同じ（?v= → sessionStorage → standard）。変えるときは両方直す。
+  (function () {
+    var v = 'standard';
+    try {
+      var raw = (new URLSearchParams(window.location.search).get('v') || '').toLowerCase();
+      v = (raw === 'airport' || raw === 'tour' || raw === 'rokko') ? raw : 'standard';
+      if (raw) sessionStorage.setItem('clover_lp_variant', v);
+      v = sessionStorage.getItem('clover_lp_variant') || v;
+    } catch (e) {}
+    gtag('set', { lp_variant: v });
+  })();
   gtag('config', window.CLOVER_CONFIG.GA_MEASUREMENT_ID);
   // GA4スクリプトタグのidも実際のIDに差し替える運用とする（下記スクリプトで動的補完）
   document.getElementById('ga4-script').src = 'https://www.googletagmanager.com/gtag/js?id=' + window.CLOVER_CONFIG.GA_MEASUREMENT_ID;
@@ -2244,7 +2256,7 @@
         var storedVariant = sessionStorage.getItem('clover_lp_variant') || LP_VARIANT;
         LP_VARIANT = storedVariant;
       } catch (e) {}
-      gtag('set', { lp_variant: LP_VARIANT });
+      // T-067: gtag('set', lp_variant) は <head> の config の前へ移した
     }
 
     // ?v= 付きURLは v なしURLを canonical にする（T-020 §17-1）
@@ -2528,6 +2540,22 @@
           .map(function (k) { return k + '=' + (data.get(k) || ''); })
           .join('&');
 
+        // T-067【編集メモ】Googleフォームに専用欄が無い項目（希望出發時間・集合地點・行李・兒童座椅・備註・
+        // 班機編號或抵達方式）は message 欄にまとめて送る。先頭は利用者の「想去的行程」本文そのまま。
+        // 見出しはGPM担当者が読む前提で日本語。記入があるものだけ追記する。項目を足すときは add(...) を1行増やす。
+        function buildMessage(d) {
+          var lines = [d.get('plan') || ''];
+          function add(label, v) { if (v) lines.push('【' + label + '】' + v); }
+          add('便名・到着方法', (d.get('flight_free') || '').trim());
+          add('希望出発時間', d.get('pickup_time') || '');
+          add('集合場所', (d.get('pickup_location') || '').trim());
+          var lug = d.get('luggage');
+          if (lug && lug !== '0') add('大型荷物', lug + '個');
+          if (d.get('child_seat')) add('チャイルドシート', '希望');
+          add('備考', (d.get('note') || '').trim());
+          return lines.join('\n');
+        }
+
         var gValues = {
           name: data.get('name') || '',
           contact: data.get('contact') || '',
@@ -2535,7 +2563,7 @@
           travel_date: data.get('service_date') || '',
           pax: data.get('pax') || '',
           arrival_plan: data.get('arrival_plan') || '',
-          message: data.get('plan') || '',
+          message: buildMessage(data), // T-067: 更多細節・便名自由入力を【見出し】付きで末尾に追記
           plan_arrange: data.get('plan_arrange') ? 'yes' : '',
           course_interest: data.get('course_interest') || sessionStorage.getItem('clover_course_interest') || 'none',
           lang: currentLang,
