@@ -9,10 +9,10 @@
 - 營運公司 / Operator: ジーピーエム株式会社 (GPM Co., Ltd.), 兵庫縣姬路市 / Himeji, Hyogo, Japan
 - 營業許可 / Licence: ハイヤー許可 近運自二第1096号 (hire-car licence No. 近運自二第1096号)
 - 旅行業 / Travel agency: 兵庫縣知事登錄 第2-904號 (Hyogo Prefectural Governor Registration No. 2-904)
-- 語言 / Languages: 繁體中文 (zh-Hant), English, 日本語
+- 語言 / Languages: 繁體中文 (zh-Hant)
 - 特色 / Features: 正規許可業者、日系品質、計時制（不跳錶）、行程可依需求規劃 / licensed operator, Japanese service quality, hourly rates (no meter), flexible itineraries
 - 洽詢方式 / How to enquire: 透過網站上的線上表單索取報價 / request a quote through the online form on the site
 
 ## 頁面 / Pages
 
-- [CLoVER 首頁（含常見問題）](https://cloverkobe.com/): 服務說明、常見問題與報價表單 / Service overview, FAQ and quote form (?lang=en for English, ?lang=ja for Japanese)
+- [CLoVER 首頁（含常見問題）](https://cloverkobe.com/): 服務說明、常見問題與報價表單 / Service overview, FAQ and quote form
