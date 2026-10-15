@@ -1134,7 +1134,8 @@
      ・「複製連結」はURLをコピー（使えない端末では選択状態の入力欄を出す）
      ・共有URLには utm_source=share＋utm_medium（native / line / copy）を付け、行程の共有なら #行程id を付ける */
   var SITE_TITLE = '姬路・神戶包車旅遊｜CLoVER';
-  var hasNative = typeof navigator.share === 'function';
+  // 共有画面（navigator.share）を使うのはスマホ（タッチ操作の端末）だけ。PC は LINE の共有画面を直接開く
+  var hasNative = typeof navigator.share === 'function' && window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
   if (hasNative) {
     document.querySelectorAll('.share-label-line').forEach(function (el) { el.hidden = true; });
     document.querySelectorAll('.share-label-native').forEach(function (el) { el.hidden = false; });
@@ -1149,31 +1150,12 @@
     return el ? el.textContent.trim() : '來神戶，一台車，把名所玩好玩滿';
   }
   function openLine(target) {
-    var url = 'https://social-plus.line.me/lineit/share?url=' + encodeURIComponent(shareUrl('line', target));
+    var url = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl('line', target));
     window.open(url, '_blank', 'noopener');
   }
-  document.querySelectorAll('.share-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var target = btn.dataset.shareTarget || 'page';
-      if (hasNative) {
-        ga('share_click', { method: 'native', share_target: target });
-        navigator.share({ title: SITE_TITLE, text: shareText(target), url: shareUrl('native', target) })
-          .catch(function (err) {
-            // 利用者が閉じた（AbortError）ときは何もしない。それ以外の失敗は LINE 共有に切り替える
-            if (err && err.name === 'AbortError') return;
-            ga('share_click', { method: 'line', share_target: target });
-            openLine(target);
-          });
-      } else {
-        ga('share_click', { method: 'line', share_target: target });
-        openLine(target);
-      }
-    });
-  });
-  document.getElementById('shareCopy').addEventListener('click', function () {
-    var url = shareUrl('copy', 'page');
+  /* リンクをコピーして「已複製連結」を出す（「複製連結」ボタンと、スマホの共有画面が失敗したときに使う） */
+  function copyLink(url) {
     var done = document.getElementById('shareDone');
-    ga('share_click', { method: 'copy', share_target: 'page' });
     function fallback() {
       var inp = document.createElement('input');
       inp.value = url; inp.readOnly = true; inp.style.cssText = 'width:100%;margin-top:10px;font-size:14px';
@@ -1185,6 +1167,29 @@
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(function () { done.textContent = '已複製連結'; }, fallback);
     } else { fallback(); }
+  }
+  document.querySelectorAll('.share-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = btn.dataset.shareTarget || 'page';
+      if (hasNative) {
+        ga('share_click', { method: 'native', share_target: target });
+        navigator.share({ title: SITE_TITLE, text: shareText(target), url: shareUrl('native', target) })
+          .catch(function (err) {
+            // 利用者が閉じた（AbortError）ときは何もしない。それ以外の失敗はポップアップを開かず、リンクのコピーにする
+            if (err && err.name === 'AbortError') return;
+            ga('share_click', { method: 'copy', share_target: target });
+            copyLink(shareUrl('copy', target));
+          });
+      } else {
+        // PC: クリックの処理の中でそのまま LINE の共有画面を開く（ポップアップとしてブロックされない）
+        ga('share_click', { method: 'line', share_target: target });
+        openLine(target);
+      }
+    });
+  });
+  document.getElementById('shareCopy').addEventListener('click', function () {
+    ga('share_click', { method: 'copy', share_target: 'page' });
+    copyLink(shareUrl('copy', 'page'));
   });
 
   /* ---------- 10. 料金の目安（CONFIG.PRICE_RANGE_TEXT。空なら非表示。?preview=price で枠だけ確認できる） ---------- */
