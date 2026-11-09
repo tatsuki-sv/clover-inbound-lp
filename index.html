@@ -47,7 +47,12 @@
     FORM_RELAY_URL: 'https://line.cloverkobe.com/form',
     // ↓ 【GPM回答待ち・差し込み口】料金の目安。金額はここにだけ書く（本文に直書きしない）。
     //   例: { zh: 'NT$00,000〜00,000' } と入れると「費用參考範圍」欄が表示される。
-    PRICE_RANGE_TEXT: { zh: '' },
+    //   T-072（10/27）：clover-cf.com の公開運賃（届出済み）に基づく。出典の額を足したり計算し直したりしないこと。
+    //   en は繁体字の下に小さく添える副表記。PRICE_AIRPORT_TEXT（空港送迎）は決まった額がないため未設定（入れない）。
+    PRICE_RANGE_TEXT: {
+      zh: '包車 6 小時 ¥34,880 起／每車（含稅）・神戶出發，已含姬路往返回送時間。4 人同行每人約 ¥8,700 起。過路費、停車費另計，會一併列入正式報價總額；22:00–翌日 5:00 加收 20%。',
+      en: 'From ¥34,880 per car for 6 hours (tax incl.), departing Kobe, including transfer time from our Himeji garage. About ¥8,700 per person for a group of 4. Tolls and parking are extra and included in your final quote; 20% surcharge 22:00–05:00.'
+    },
     // ↓ 共有ボタンで送るURL（本番トップ）。utm は送り方ごとに JS が付け足す。
     SHARE_BASE_URL: 'https://cloverkobe.com/',
     // ↓ 写真の差し替え口（assets/ フォルダ内のファイル名）。
@@ -88,6 +93,7 @@
 
 <!-- ===== 構造化データ（本番 T-061 と同じ内容）=====
      FAQPage はこのページの繁体字FAQ（#faq）の文と一致させている。FAQ本文を直したら、ここも直すこと。 -->
+<!-- T-072：LocalBusiness の priceRange は冒頭 CONFIG の PRICE_RANGE_TEXT と同じ額。変えるときは両方直す。 -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -102,6 +108,7 @@
       "address": {"@type": "PostalAddress", "addressLocality": "姫路市", "addressRegion": "兵庫県", "addressCountry": "JP"},
       "areaServed": ["神戸", "姫路", "有馬温泉", "六甲山", "神戸空港", "関西国際空港"],
       "availableLanguage": ["zh-Hant"],
+      "priceRange": "包車 6 小時 ¥34,880 起／每車（含稅）",
       "identifier": [
         {"@type": "PropertyValue", "name": "ハイヤー許可番号", "value": "近運自二第1096号"},
         {"@type": "PropertyValue", "name": "旅行業登録番号（兵庫県知事登録）", "value": "第2-904号"}
@@ -251,6 +258,7 @@
   .price-box{margin-top:30px;padding:22px 20px;background:var(--card);border:1px solid var(--rule)}
   .price-box h3{font-size:15px}
   .price-val{margin-top:10px;font-size:18px;letter-spacing:.04em;line-height:1.6}
+  .price-box .price-en{font-size:12px;color:var(--ink-3)}
   .price-box p{margin-top:10px;font-size:13px;line-height:1.85;color:var(--ink-2)}
   .tbc{background:repeating-linear-gradient(-45deg,#f1e2c9,#f1e2c9 6px,#f7ecda 6px,#f7ecda 12px);padding:2px 6px;color:#7a4a1b;font-size:14px}
   .sec-cta{margin-top:30px}
@@ -582,8 +590,10 @@
            creative に文言の修正を依頼すること。 -->
     <div class="price-box reveal" id="priceRangeBox" hidden>
       <h3>費用參考範圍</h3>
-      <p>以下為最常見的「一日包車8小時・ALPHARD（1–4位）」的參考範圍。實際金額依日期、路線、時數與人數而定。</p>
-      <div class="price-val"><span id="priceRangeVal"></span>／8小時（ALPHARD・1–4位）</div>
+      <!-- 【編集メモ】T-072：旧文の「8小時・ALPHARD」前提は公開運賃（6小時）と合わないため外した。 -->
+      <p>實際金額依日期、路線、時數與人數而定。</p>
+      <div class="price-val"><span id="priceRangeVal"></span></div>
+      <p class="price-en" id="priceRangeEn" lang="en" hidden></p>
       <p>時間計費、不跳錶。途中塞車不會另外加價。此為參考範圍，非正式報價。<strong>正式報價會以中文回覆總額（含稅）</strong>，確認後才成立預約。</p>
     </div>
 
@@ -1196,7 +1206,12 @@
   (function () {
     var box = document.getElementById('priceRangeBox');
     var val = (cfg.PRICE_RANGE_TEXT || {}).zh || '';
-    if (val) { document.getElementById('priceRangeVal').textContent = val; box.hidden = false; }
+    var en = (cfg.PRICE_RANGE_TEXT || {}).en || '';
+    if (val) {
+      document.getElementById('priceRangeVal').textContent = val;
+      if (en) { var e = document.getElementById('priceRangeEn'); e.textContent = en; e.hidden = false; }
+      box.hidden = false;
+    }
     else if (params.get('preview') === 'price') {
       document.getElementById('priceRangeVal').innerHTML = '<span class="tbc">{GPM回答待ち：料金の目安}</span>';
       box.hidden = false;
