@@ -31,7 +31,7 @@
   ============================================================
   設定（ここだけ書き換える）/ CONFIG
   ・計測ID・フォーム送信先・entry ID は本番 site/index.html と同じ値（変えないこと）
-  ・LINE_URL：LINE公式アカウント開設後にURLを入れると「LINE 諮詢」ボタンが出る。空なら出ない。
+  ・LINE_URL：「LINE 諮詢」ボタンで開く、問い合わせ文面入りのトークURL。空なら出ない。
   ・PRICE_RANGE_TEXT：料金の目安（GPM様のご回答待ち）。空のあいだは料金の目安欄ごと非表示。
   ・PHOTO：写真の差し替え口。実車・実運転手の写真が届いたら、ここのファイル名を変えるだけでよい。
   ============================================================
@@ -42,7 +42,7 @@
     PIXEL_ID: '1700299801055459',
     GOOGLE_FORM_ACTION: 'https://docs.google.com/forms/d/e/1FAIpQLSdfsg1t5h76k8jqSjF2xXJi5LN5dT3wYYT1QAkG2shafnhkLQ/formResponse',
     GOOGLE_FORM_ENTRIES: {name:'entry.1615223431', flight_no:'entry.67438996', contact:'entry.1714242736', travel_date:'entry.171112459', pax:'entry.1296141816', arrival_plan:'entry.42492822', message:'entry.936865536', plan_arrange:'entry.2023605452', course_interest:'entry.1342674337', lang:'entry.1138499311', utm:'entry.1786210250', lp_variant:'entry.247818356'},
-    LINE_URL: 'https://line.me/R/ti/p/@630qetpa',      // ← LINE 公式アカウントの友だち追加URL（T-070）。空にすると LINE 諮詢ボタンが消える
+    LINE_URL: 'https://line.me/R/oaMessage/%40630qetpa/?' + encodeURIComponent('你好，我想詢問神戶／姬路包車。\n日期：\n人數：\n想去的地方：'),
     // ↓ T-071: フォームの送り先（中継）。届かないときは上の GOOGLE_FORM_ACTION へ直接送る。
     FORM_RELAY_URL: 'https://line.cloverkobe.com/form',
     // ↓ 【GPM回答待ち・差し込み口】料金の目安。金額はここにだけ書く（本文に直書きしない）。
@@ -125,7 +125,7 @@
       "inLanguage": "zh-Hant",
       "mainEntity": [
         {"@type": "Question", "name": "帶長輩、小孩或大件行李，也方便嗎？", "acceptedAnswer": {"@type": "Answer", "text": "這正是包車最有感的地方。全程不用換車、不用把行李搬上搬下，也不用找寄物櫃——行李一路放在車上。ALPHARD 可放大型行李箱 3–4 件（4 人乘坐時），HIACE 可放 6–9 件。兒童座椅免費提供，請在預約時告知孩子的年齡與體重，我們會事先裝好。嬰兒車、輪椅等也請一併告知。"}},
-        {"@type": "Question", "name": "我是從關西機場（KIX）或大阪、京都出發，也能用嗎？", "acceptedAnswer": {"@type": "Answer", "text": "可以。關西機場、大阪、京都、奈良的上下車同樣可以安排。這些路線採計時制（不跳錶），與神戶機場接送的固定價格不同。所需時間較長，請在索取報價時告知出發地、目的地與班機時間。"}},
+        {"@type": "Question", "name": "我是從關西機場（KIX）或大阪、京都出發，也能用嗎？", "acceptedAnswer": {"@type": "Answer", "text": "起點或終點至少有一端需在兵庫縣內（神戶、姬路等）。關西機場接機後前往神戶、姬路可以安排。若行程的起點與終點都在大阪、京都，請在索取報價時告知，我們會先確認可否。"}},
         {"@type": "Question", "name": "除了包車，可以連整趟行程的預約也一起交給你們嗎？", "acceptedAnswer": {"@type": "Answer", "text": "可以。CLoVER 的營運公司 GPM 股份有限公司同時登錄為旅行業者（兵庫縣知事登錄 第2-904號），因此除了用車，溫泉外湯的入浴券、餐廳訂位、住宿與各項設施的門票，都能由我們代為安排。這些費用不包含在包車報價中，我們會另外報價並在報價單上分項列出，確認後才成立。請在索取報價時一併告知。"}},
         {"@type": "Question", "name": "可以取消嗎？", "acceptedAnswer": {"@type": "Answer", "text": "可以。取消手續費依取消時間點而定，具體規定會在報價與預約確認郵件中明確載明，確認後才成立預約。因颱風・大雪等天候因素導致無法安全行駛時，我們會與您協商改期或全額退款。"}},
         {"@type": "Question", "name": "怎麼付款？", "acceptedAnswer": {"@type": "Answer", "text": "可於當天以日圓現金支付，或依事前安排以信用卡・銀行匯款支付。可支付方式與付款時間會在報價郵件中說明。日本沒有給小費的習慣，車資之外不需另外支付。"}},
@@ -194,6 +194,8 @@
   .line-btn{flex:none;display:flex;align-items:center;gap:8px;padding:15px 18px;border:1px solid var(--ink);border-radius:999px;
     font-size:14px;letter-spacing:.1em}
   .line-btn::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line-green)}
+  .line-contact{flex:none}
+  .line-app-guide{max-width:240px;margin-top:7px;font-size:11px;line-height:1.6;color:var(--ink-3)}
   .op{margin-top:12px;font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-align:center}
 
   /* ---------- 2節目以降 共通 ---------- */
@@ -362,7 +364,6 @@
     .sub{font-size:15px}
     .sec{padding:96px 48px 88px}
     h2{font-size:28px}
-    .grid2.four{grid-template-columns:repeat(4,1fr)}
     .sticky{display:none}
   }
   @media (max-width:959px){ .fv-copy{display:contents} }
@@ -400,34 +401,14 @@
 
   <div class="act">
     <a class="cta cta-btn" data-cta-position="hero_quote" href="#lead-form">線上估價<span class="arw" aria-hidden="true">→</span></a>
-    <!-- LINE 諮詢（CONFIG.LINE_URL が空のあいだは hidden のまま） -->
-    <a class="line-btn contact-btn" data-contact-method="line" data-contact-position="hero" target="_blank" rel="noopener" hidden>LINE 諮詢</a>
+    <div class="line-contact">
+      <!-- LINE 諮詢（CONFIG.LINE_URL が空のあいだは hidden のまま） -->
+      <a class="line-btn contact-btn" data-contact-method="line" data-contact-position="hero" target="_blank" rel="noopener" hidden>LINE 諮詢</a>
+      <p class="line-app-guide" hidden>若無法開啟 LINE，請點右上角「⋯」，選擇「以瀏覽器開啟」。</p>
+    </div>
   </div>
   <!-- 営業者表記（T-063 ブリーフ指定の文字列） -->
   <p class="op">營運：ジーピーエム株式会社</p>
-</section>
-
-<!-- ============================================================
-     2. 大阪・京都から1日足す提案（新規の節。新しく書いた文は README に一覧）
-     ============================================================ -->
-<section class="sec" id="osaka">
-  <div class="wrap">
-    <p class="eyebrow reveal">From Osaka or Kyoto, one more day</p>
-    <h2 class="reveal">住大阪、京都也沒關係<br>這一趟，多加一天<br>神戶・姬路・有馬</h2>
-    <p class="lead reveal">關西機場、大阪、京都、奈良的上下車同樣可以安排。出發地與目的地請在索取報價時告知。</p>
-
-    <div class="grid2 four">
-      <figure class="fig reveal"><img src="assets/istock-himeji-castle.webp" alt="姬路城" loading="lazy" width="1600" height="1045" style="object-position:50% 40%"><figcaption class="cap"><span><i>Pl.</i> 02</span><span class="zh">姬路城</span></figcaption></figure>
-      <figure class="fig reveal"><img src="assets/istock-kobe-beef.webp" alt="神戶牛" loading="lazy" width="1600" height="1116" style="object-position:55% 50%"><figcaption class="cap"><span><i>Pl.</i> 03</span><span class="zh">神戶牛</span></figcaption></figure>
-      <figure class="fig reveal"><img src="assets/istock-arima-ginnoyu.webp" alt="有馬溫泉" loading="lazy" width="1600" height="1066" style="object-position:66% 50%"><figcaption class="cap"><span><i>Pl.</i> 04</span><span class="zh">有馬溫泉</span></figcaption></figure>
-      <figure class="fig reveal"><img src="assets/istock-rokko-night.webp" alt="六甲山的夜景" loading="lazy" width="1600" height="1134" style="object-position:40% 50%"><figcaption class="cap"><span><i>Pl.</i> 05</span><span class="zh">六甲山</span></figcaption></figure>
-    </div>
-    <!-- T-002 hero.sub の一部「這四處彼此不順路，電車難以串起——一台車可以。」 -->
-    <p class="lead reveal">這四處彼此不順路，電車難以串起——一台車可以。</p>
-    <!-- T-002 faq2.a3 の後半 -->
-    <p class="note reveal">這些路線採計時制（不跳錶）。所需時間較長，請在索取報價時告知出發地、目的地與班機時間。</p>
-    <a class="link-more" href="#day">往下看一天的走法 <span>↓</span></a>
-  </div>
 </section>
 
 <!-- ============================================================
@@ -666,7 +647,7 @@
     <form id="lead-form-el" action="">
       <div class="field">
         <label for="f-name">姓名</label>
-        <input id="f-name" type="text" name="name" required autocomplete="name" placeholder="例：陳小美 / e.g. Mei Chen">
+        <input id="f-name" type="text" name="name" autocomplete="name" placeholder="例：陳小美 / e.g. Mei Chen">
       </div>
       <div class="field">
         <label for="f-contact">聯絡方式（Email 或 LINE／WhatsApp ID）</label>
@@ -696,7 +677,7 @@
       </div>
       <div class="field">
         <label for="arrivalPlan">想怎麼用車</label>
-        <select id="arrivalPlan" name="arrival_plan" required autocomplete="off">
+        <select id="arrivalPlan" name="arrival_plan" autocomplete="off">
           <option value="" disabled selected>請選擇</option>
           <option value="airport_transfer">機場接送（接機或送機）</option>
           <option value="day_charter">一日包車（神戶・姬路・有馬・六甲山）</option>
@@ -708,7 +689,7 @@
       </div>
       <div class="field">
         <label for="f-plan">想去的行程</label>
-        <textarea id="f-plan" name="plan" required placeholder="例：關西機場接到神戶飯店／姬路城和書寫山一日遊／還沒決定，想請你們建議"></textarea>
+        <textarea id="f-plan" name="plan" placeholder="例：關西機場接到神戶飯店／姬路城和書寫山一日遊／還沒決定，想請你們建議"></textarea>
         <span class="help">還沒想好也沒關係，寫「請建議」即可。</span>
       </div>
       <div class="field">
@@ -783,7 +764,7 @@
     <h2 class="reveal">常見問題</h2>
     <div class="faq reveal">
       <details><summary>帶長輩、小孩或大件行李，也方便嗎？</summary><div class="a">這正是包車最有感的地方。全程不用換車、不用把行李搬上搬下，也不用找寄物櫃——行李一路放在車上。ALPHARD 可放大型行李箱 3–4 件（4 人乘坐時），HIACE 可放 6–9 件。兒童座椅免費提供，請在預約時告知孩子的年齡與體重，我們會事先裝好。嬰兒車、輪椅等也請一併告知。</div></details>
-      <details><summary>我是從關西機場（KIX）或大阪、京都出發，也能用嗎？</summary><div class="a">可以。關西機場、大阪、京都、奈良的上下車同樣可以安排。這些路線採計時制（不跳錶），與神戶機場接送的固定價格不同。所需時間較長，請在索取報價時告知出發地、目的地與班機時間。</div></details>
+      <details><summary>我是從關西機場（KIX）或大阪、京都出發，也能用嗎？</summary><div class="a">起點或終點至少有一端需在兵庫縣內（神戶、姬路等）。關西機場接機後前往神戶、姬路可以安排。若行程的起點與終點都在大阪、京都，請在索取報價時告知，我們會先確認可否。</div></details>
       <details><summary>除了包車，可以連整趟行程的預約也一起交給你們嗎？</summary><div class="a">可以。CLoVER 的營運公司 GPM 股份有限公司同時登錄為旅行業者（兵庫縣知事登錄 第2-904號），因此除了用車，溫泉外湯的入浴券、餐廳訂位、住宿與各項設施的門票，都能由我們代為安排。這些費用不包含在包車報價中，我們會另外報價並在報價單上分項列出，確認後才成立。請在索取報價時一併告知。</div></details>
       <details><summary>可以取消嗎？</summary><div class="a">可以。取消手續費依取消時間點而定，具體規定會在報價與預約確認郵件中明確載明，確認後才成立預約。因颱風・大雪等天候因素導致無法安全行駛時，我們會與您協商改期或全額退款。</div></details>
       <details><summary>怎麼付款？</summary><div class="a">可於當天以日圓現金支付，或依事前安排以信用卡・銀行匯款支付。可支付方式與付款時間會在報價郵件中說明。日本沒有給小費的習慣，車資之外不需另外支付。</div></details>
@@ -929,6 +910,11 @@
       px('track', 'Contact', { content_name: 'line' });
     });
   });
+  if (/FBAN|FBAV|Instagram/i.test(navigator.userAgent)) {
+    var heroLineBtn = document.querySelector('.contact-btn[data-contact-method="line"][data-contact-position="hero"]');
+    var lineAppGuide = heroLineBtn && heroLineBtn.parentElement.querySelector('.line-app-guide');
+    if (lineAppGuide && !heroLineBtn.hidden) lineAppGuide.hidden = false;
+  }
 
   /* ---------- 4. course_interest / service_type（T-005 追補#6。本番と同じ） ---------- */
   document.querySelectorAll('[data-course-id]').forEach(function (el) {
@@ -968,10 +954,10 @@
 
   /* ---------- 6. 節への到達計測 section_view（T-062）----------
      【編集メモ】節を増減したら SECTION_IDS も直す。本番と同じ id（day / fleet / pricing / lead-form / faq）は
-     そろえてあるので、本番と v2 の離脱位置を同じ物差しで比べられる。osaka / family / trust / share は v2 の新しい節。 */
+     そろえてあるので、本番と v2 の離脱位置を同じ物差しで比べられる。family / trust / share は v2 の新しい節。 */
   (function () {
     if (!('IntersectionObserver' in window)) return;
-    var SECTION_IDS = ['osaka', 'day', 'family', 'fleet', 'pricing', 'trust', 'share', 'lead-form', 'faq'];
+    var SECTION_IDS = ['day', 'family', 'fleet', 'pricing', 'trust', 'share', 'lead-form', 'faq'];
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var tall = entry.intersectionRect.height >= window.innerHeight * 0.5;
