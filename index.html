@@ -21,7 +21,8 @@
 <meta property="og:title" content="姬路・神戶包車旅遊｜CLoVER">
 <meta property="og:description" content="姬路出發的都市型包車服務。日本政府核可的正規營運業者，計時制、不跳錶，行程可依需求規劃。ALPHARD／HIACE 最新車款，日式待客品質。歡迎線上索取報價。">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://cloverkobe.com/assets/demo-01.jpg">
+<!-- 【編集メモ】T-074: GPM様の実車写真（アルファード正面）に差し替えた -->
+<meta property="og:image" content="https://cloverkobe.com/assets/fleet-alphard-front.jpg">
 <meta property="og:url" content="https://cloverkobe.com/">
 <meta property="og:site_name" content="CLoVER">
 <meta property="og:locale" content="zh_TW">
@@ -56,12 +57,13 @@
     // ↓ 共有ボタンで送るURL（本番トップ）。utm は送り方ごとに JS が付け足す。
     SHARE_BASE_URL: 'https://cloverkobe.com/',
     // ↓ 写真の差し替え口（assets/ フォルダ内のファイル名）。
-    //   demo-01 / demo-05 は「GPM様の実車・実運転手か未確認」の写真（README 参照）。
+    //   T-074（2026-11-20）: GPM様の実車写真（川中さん 8/31 提供）に差し替えた。
+    //   旧 demo-*.jpg は実車ではないため参照を外した（ファイルは assets/ に残してある）。
     PHOTO: {
-      hero:   'demo-01.jpg',   // 1画面目の額装写真（運転手がドアを開けて待つ車）
-      driver: 'demo-05.jpg',   // 車両と運転手の節（運転手が旅行者を迎える場面。車種名は出していない）
-      alphard:'demo-01.jpg',   // ALPHARD のカード
-      hiace:  'demo-06.jpg'    // HIACE のカード
+      hero:   'fleet-alphard-front.jpg',    // 1画面目の額装写真（アルファード黒・正面）
+      driver: 'fleet-alphard-interior.jpg', // 車両の節の大きい写真（アルファードの後部座席）。運転手の実写は無い
+      alphard:'fleet-alphard-side.jpg',     // ALPHARD のカード（斜め前から。hero とは別カット）
+      hiace:  'fleet-hiace-front.jpg'       // HIACE のカード（白・斜め前から）
     }
   };
 </script>
@@ -104,7 +106,7 @@
       "name": "CLoVER",
       "description": "姬路出發的都市型包車（Hire）服務。計時制、不跳錶，行程可依需求規劃。",
       "url": "https://cloverkobe.com/",
-      "image": "https://cloverkobe.com/assets/demo-01.jpg",
+      "image": "https://cloverkobe.com/assets/fleet-alphard-front.jpg",
       "address": {"@type": "PostalAddress", "addressLocality": "姫路市", "addressRegion": "兵庫県", "addressCountry": "JP"},
       "areaServed": ["神戸", "姫路", "有馬温泉", "六甲山", "神戸空港", "関西国際空港"],
       "availableLanguage": ["zh-Hant"],
@@ -384,9 +386,11 @@
   <!-- 許可番号2点（T-002 hero.badge.1 / .2 そのまま。文言変更不可） -->
   <p class="licence"><span>政府核可 近運自二第1096號</span><span>旅行業登錄 第2-904號</span></p>
 
-  <!-- 【編集メモ】1画面目の写真。差し替えは冒頭 CONFIG の PHOTO.hero で行う（src はJSが上書き） -->
+  <!-- 【編集メモ】1画面目の写真。差し替えは冒頭 CONFIG の PHOTO.hero で行う（src はJSが上書き）
+       T-074: 実車（アルファード正面）に替えた。運転手は写っていないので alt から「與司機」を外した。
+       切り抜き位置は下の style（object-position）で調整。 -->
   <figure class="plate">
-    <img data-photo="hero" src="assets/demo-01.jpg" alt="CLoVER 的 TOYOTA ALPHARD 與司機" width="1536" height="1024" fetchpriority="high">
+    <img data-photo="hero" src="assets/fleet-alphard-front.jpg" alt="CLoVER 的 TOYOTA ALPHARD" width="1800" height="1199" fetchpriority="high" style="object-position:50% 62%">
     <figcaption class="cap"><span><i>Pl.</i> 01</span><span>TOYOTA ALPHARD</span></figcaption>
   </figure>
 
@@ -461,7 +465,8 @@
     <article class="plan reveal" id="plan-departure" data-course-id="airport">
       <p class="plan-k">Plan C — Departure day</p>
       <h3 data-share-title>回國日｜從有馬或神戶市區直接送到機場</h3>
-      <figure class="fig"><img src="assets/demo-03-airport.jpg" alt="" loading="lazy" width="1500" height="1000">
+      <!-- 【編集メモ】T-074: 旧 demo-03-airport.jpg（黒いハイエースと旅行者のデモ写真。実車ではない）を実車の白いハイエース（側面）に替えた -->
+      <figure class="fig"><img src="assets/fleet-hiace-side.jpg" alt="" loading="lazy" width="1800" height="1199" style="object-position:50% 62%">
         <figcaption class="cap"><span><i>Pl.</i> 08</span><span>TOYOTA HIACE</span></figcaption></figure>
       <dl class="tl">
         <dt>早上</dt><dd>在旅館用完早餐、泡最後一次湯（住市區的話，退房後直接出發）</dd>
@@ -518,7 +523,8 @@
 <!-- ============================================================
      5. 車両と運転手（文言は T-002 fleet.* / why.3 から流用）
      ・写真はすべて冒頭 CONFIG.PHOTO で差し替えられる
-     ・運転手の写真（demo-05）の車は ALPHARD と異なる車種に見えるため、車種名は書いていない
+     ・T-074: 運転手の実写が無いため、大きい写真はアルファードの後部座席（実車）にした。
+       写真に合わせて alt とキャプションを車種名（TOYOTA ALPHARD）に直した（旧キャプション「姬路城前」は撮影場所と合わないため外した）
      ============================================================ -->
 <section class="sec tint" id="fleet">
   <div class="wrap">
@@ -526,19 +532,19 @@
     <h2 class="reveal">車輛介紹</h2>
     <p class="lead reveal">全車為最新年式的營業用綠牌車，配備日本原廠的先進安全輔助系統，並定期接受法定檢查與整備。</p>
 
-    <figure class="fig reveal"><img data-photo="driver" src="assets/demo-05.jpg" alt="司機迎接旅客" loading="lazy" width="1500" height="1000" style="object-position:30% 60%">
-      <figcaption class="cap"><span><i>Pl.</i> 09</span><span class="zh">姬路城前</span></figcaption></figure>
+    <figure class="fig reveal"><img data-photo="driver" src="assets/fleet-alphard-interior.jpg" alt="TOYOTA ALPHARD 車內" loading="lazy" width="1800" height="1199" style="object-position:50% 65%">
+      <figcaption class="cap"><span><i>Pl.</i> 09</span><span>TOYOTA ALPHARD</span></figcaption></figure>
     <p class="lead reveal">詢問、報價與預約確認全程以繁體中文回覆，我們會在1個營業日內回信。出發前也會把當天的行程表以中文提供給您。</p>
 
     <div class="vehicle reveal">
-      <figure class="fig"><img data-photo="alphard" src="assets/demo-01.jpg" alt="TOYOTA ALPHARD" loading="lazy" width="1536" height="1024" style="object-position:20% 60%">
+      <figure class="fig"><img data-photo="alphard" src="assets/fleet-alphard-side.jpg" alt="TOYOTA ALPHARD" loading="lazy" width="1800" height="1199" style="object-position:50% 62%">
         <figcaption class="cap"><span><i>Pl.</i> 10</span><span>TOYOTA ALPHARD</span></figcaption></figure>
       <h3>TOYOTA ALPHARD</h3>
       <p class="spec"><span class="zh">乘客 1–4 位｜行李 大型 3–4 件</span></p>
       <p>日本高級接送的代表車款。獨立座椅、寬敞腿部空間，長距離移動也不易疲累，適合家庭旅遊與商務接待。</p>
     </div>
     <div class="vehicle reveal">
-      <figure class="fig"><img data-photo="hiace" src="assets/demo-06.jpg" alt="TOYOTA HIACE" loading="lazy" width="1400" height="933" style="object-position:30% 60%">
+      <figure class="fig"><img data-photo="hiace" src="assets/fleet-hiace-front.jpg" alt="TOYOTA HIACE" loading="lazy" width="1800" height="1199" style="object-position:50% 62%">
         <figcaption class="cap"><span><i>Pl.</i> 11</span><span>TOYOTA HIACE</span></figcaption></figure>
       <h3>TOYOTA HIACE</h3>
       <p class="spec"><span class="zh">乘客 5–9 位｜行李 大型 6–9 件</span></p>
